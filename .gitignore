@@ -1,0 +1,21 @@
+# Dados e documentos reais nao devem entrar no repositorio do painel publico.
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+*.pdf
+*.doc
+*.docx
+*.ppt
+*.pptx
+
+# Arquivos locais/sensiveis.
+.env
+.env.*
+secrets.*
+credentials.*
+*.local
+
+# Metadados do sistema.
+Thumbs.db
+.DS_Store

@@ -1,4 +1,3 @@
 window.PAINEL_CONFIG = {
-  // Cole aqui a URL /exec da implantacao Web App do Apps Script da DECOF.
-  apiUrl: ""
+  apiUrl: "https://script.google.com/macros/s/AKfycby1QQr6sq9Tk1W2Xb6aMkaMzW8w4B3d6Aegr9vZ3TtSoNmc-5JjbFkPdoIsc1Ra4zBZ/exec"
 };

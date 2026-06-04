@@ -2340,8 +2340,15 @@ function calKey_(s) {
   return calNorm_(s).replace(/\s+/g, '');
 }
 
+var CALENDARIO_MUNICIPIO_MEMO = null;
 function calMunicipio_() {
-  return painelConfig_('PAINEL_MUNICIPIO_CALENDARIO', PAINEL_MUNICIPIO_CALENDARIO_FALLBACK);
+  // Memoiza o município por execução. Sem isso, este getProperty do
+  // PropertiesService era disparado a CADA chamada de isDiaUtil() — dezenas de
+  // milhares de vezes por requisição de painel.dados —, estourando o tempo de
+  // execução ("Tempo esgotado ao comunicar com o Apps Script").
+  if (CALENDARIO_MUNICIPIO_MEMO !== null) return CALENDARIO_MUNICIPIO_MEMO;
+  CALENDARIO_MUNICIPIO_MEMO = painelConfig_('PAINEL_MUNICIPIO_CALENDARIO', PAINEL_MUNICIPIO_CALENDARIO_FALLBACK);
+  return CALENDARIO_MUNICIPIO_MEMO;
 }
 
 function calFindCol_(header, nomes) {

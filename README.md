@@ -99,6 +99,7 @@ Para funcionar no GitHub Pages, o painel chama o Apps Script por JSONP:
 2. Mantenha `index.html`, `config.js`, `README.md` e `apps-script/` na raiz do repositorio.
 3. No Apps Script da conta institucional, cole o conteudo de `apps-script/Code.gs`.
 4. Configure no Apps Script o ID real da planilha, preferencialmente em propriedades do script.
+   - `PAINEL_MUNICIPIO_CALENDARIO`: municipio usado nos feriados locais, por exemplo `Rio de Janeiro`.
 5. Implante o Apps Script como Web App.
 6. Copie a URL final terminada em `/exec`.
 7. Cole essa URL em `config.js`, no campo `apiUrl`.
@@ -107,6 +108,32 @@ Para funcionar no GitHub Pages, o painel chama o Apps Script por JSONP:
 10. Aguarde o GitHub gerar o link publico.
 
 O campo `Custom domain` deve ficar vazio enquanto nao houver um dominio institucional real com DNS configurado pela TI. Trocar o nome do repositorio ja muda o caminho do GitHub Pages, sem precisar cadastrar dominio proprio.
+
+## Calendario de feriados oficiais
+
+O painel calcula prazos, atrasos, Gantt e capacidade usando dias uteis. A regra atual considera:
+
+- sabados e domingos;
+- feriados nacionais fixos;
+- feriados oficiais cadastrados na aba `Calendario`.
+
+A aba `Calendario` deve ter:
+
+```text
+Data | Nome | Tipo | Municipio | AfetaPrazo | Fonte | Observacao
+```
+
+Use `Tipo` contendo `Feriado` e `AfetaPrazo = Sim`. Pontos facultativos nao entram nesta versao, mesmo que sejam cadastrados por engano como `Ponto facultativo`.
+
+Use `Municipio = TODOS` para feriados nacionais e estaduais do RJ. Use o municipio especifico para feriados locais da unidade, como `Rio de Janeiro`, `Niteroi` ou `Duque de Caxias`.
+
+Fontes recomendadas:
+
+- Feriados nacionais: Gov.br / MGI.
+- Feriados estaduais do RJ: ALERJ / Lei RJ 5.645/2010.
+- Feriados municipais: prefeitura ou diario oficial do municipio.
+
+Se a aba `Calendario` ainda nao existir, o painel continua funcionando com o fallback de feriados nacionais fixos.
 
 ## Como adaptar para outro campus
 

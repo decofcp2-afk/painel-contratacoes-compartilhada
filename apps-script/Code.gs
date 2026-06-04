@@ -47,6 +47,7 @@ var ANO_BASE = 2026;
 // Toda alteração operacional deve acontecer pelo AppSEL.
 var PAINEL_SOMENTE_LEITURA = true;
 var PAINEL_WEBAPP_URL_FALLBACK = '';
+var PAINEL_MUNICIPIO_CALENDARIO_FALLBACK = 'Rio de Janeiro';
 
 function painelConfig_(chave, fallback) {
   try {
@@ -721,6 +722,7 @@ function invalidarCache() {
   var cache = CacheService.getScriptCache();
   cache.remove('dados_painel');
   cache.remove('dados_capacidade');
+  CALENDARIO_CACHE = null;
   return { ok: true };
 }
 
@@ -2321,6 +2323,104 @@ var FERIADOS_FIXOS = [
   '11-20', // Consciência Negra (Lei 14.759/2023)
   '12-25'  // Natal
 ];
+var CALENDARIO_ABA = 'Calendario';
+var CALENDARIO_CACHE = null;
+var CALENDARIO_CACHE_MS = 5 * 60 * 1000;
+// A aba Calendario complementa os feriados nacionais fixos com feriados
+// oficiais nacionais moveis, estaduais e municipais cadastrados por ano.
+// Linhas de ponto facultativo ficam fora da regra atual.
+
+function calNorm_(s) {
+  return String(s || '').trim().toUpperCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^A-Z0-9]+/g, ' ');
+}
+
+function calKey_(s) {
+  return calNorm_(s).replace(/\s+/g, '');
+}
+
+function calMunicipio_() {
+  return painelConfig_('PAINEL_MUNICIPIO_CALENDARIO', PAINEL_MUNICIPIO_CALENDARIO_FALLBACK);
+}
+
+function calFindCol_(header, nomes) {
+  var alvo = {};
+  nomes.forEach(function(n) { alvo[calKey_(n)] = true; });
+  for (var i = 0; i < header.length; i++) {
+    if (alvo[calKey_(header[i])]) return i;
+  }
+  return -1;
+}
+
+function calTipoFeriado_(tipo) {
+  var n = calNorm_(tipo);
+  return n.indexOf('FERIADO') >= 0 &&
+    n.indexOf('FACULTATIVO') < 0 &&
+    n.indexOf('PONTO') < 0;
+}
+
+function calAfetaPrazo_(valor) {
+  var n = calNorm_(valor);
+  return n === 'SIM' || n === 'S' || n === 'TRUE' || n === '1';
+}
+
+function calMunicipioOk_(valor, municipioAlvo) {
+  var m = calNorm_(valor);
+  return !m || m === 'TODOS' || m === calNorm_(municipioAlvo);
+}
+
+function calendarioFeriadosMap_() {
+  var municipio = calMunicipio_();
+  var agora = Date.now();
+  if (CALENDARIO_CACHE &&
+      CALENDARIO_CACHE.municipio === municipio &&
+      (agora - CALENDARIO_CACHE.ts) < CALENDARIO_CACHE_MS) {
+    return CALENDARIO_CACHE.datas;
+  }
+
+  var datas = {};
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sh = ss ? ss.getSheetByName(CALENDARIO_ABA) : null;
+    if (!sh || sh.getLastRow() < 2) {
+      CALENDARIO_CACHE = { municipio: municipio, ts: agora, datas: datas };
+      return datas;
+    }
+    var values = sh.getDataRange().getValues();
+    var headerRow = -1;
+    for (var r = 0; r < values.length; r++) {
+      if (calFindCol_(values[r], ['Data']) >= 0) { headerRow = r; break; }
+    }
+    if (headerRow < 0) {
+      CALENDARIO_CACHE = { municipio: municipio, ts: agora, datas: datas };
+      return datas;
+    }
+    var h = values[headerRow];
+    var iData = calFindCol_(h, ['Data']);
+    var iTipo = calFindCol_(h, ['Tipo']);
+    var iMun = calFindCol_(h, ['Municipio', 'Município']);
+    var iAfeta = calFindCol_(h, ['AfetaPrazo', 'Afeta Prazo']);
+    if (iData < 0 || iTipo < 0 || iAfeta < 0) {
+      CALENDARIO_CACHE = { municipio: municipio, ts: agora, datas: datas };
+      return datas;
+    }
+    for (var linha = headerRow + 1; linha < values.length; linha++) {
+      var row = values[linha];
+      var d = parseDateValue(row[iData]);
+      if (!d) continue;
+      if (!calTipoFeriado_(row[iTipo])) continue;
+      if (!calAfetaPrazo_(row[iAfeta])) continue;
+      if (!calMunicipioOk_(iMun >= 0 ? row[iMun] : 'TODOS', municipio)) continue;
+      datas[isoLocal_(d)] = true;
+    }
+  } catch(e) {
+    datas = {};
+  }
+
+  CALENDARIO_CACHE = { municipio: municipio, ts: agora, datas: datas };
+  return datas;
+}
 
 // Verifica se uma data é feriado nacional fixo
 function isFeriadoFixo(d) {
@@ -2332,7 +2432,7 @@ function isFeriadoFixo(d) {
 // Verifica se uma data é dia útil (não é sáb/dom e não é feriado fixo)
 function isDiaUtil(d) {
   var dow = d.getDay(); // 0=Dom, 6=Sáb
-  return dow !== 0 && dow !== 6 && !isFeriadoFixo(d);
+  return dow !== 0 && dow !== 6 && !isFeriadoFixo(d) && !calendarioFeriadosMap_()[isoLocal_(d)];
 }
 
 // Avança uma data em N dias úteis.

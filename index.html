@@ -1307,7 +1307,7 @@ function addDiasIso_(iso, dias) {
 function periodoRealizadoEtapa_(et) {
   if (!et || !et.realizacao_iso) return null;
   if (et.status === 'ok' && et.dias > 0 && et.fim_iso) {
-    return { label: 'Período de atraso', texto: isoToDD_MM(addDiasIso_(et.fim_iso, 1)) + ' -> ' + isoToDD_MM_YY(et.realizacao_iso) };
+    return { label: 'Período realizado', texto: isoToDD_MM(addDiasIso_(et.fim_iso, 1)) + ' -> ' + isoToDD_MM_YY(et.realizacao_iso) };
   }
   return { label: 'Realizado em', texto: isoToDD_MM_YY(et.realizacao_iso) };
 }
@@ -1512,6 +1512,20 @@ function render(filtered) {
     // e pelas cores das barras do Gantt à direita — não mais pela cor do fill.
     var pc2 = (p.execucao === 100 || p.status === 'ok') ? 'done' : 'ok';
     var info = document.createElement('div'); info.className = 'name-info';
+    info.style.cursor = 'pointer';
+    info.title = 'Clique para expandir ou recolher as etapas';
+    info.setAttribute('role', 'button');
+    info.setAttribute('tabindex', '0');
+    info.setAttribute('aria-expanded', expanded[p.id] ? 'true' : 'false');
+    (function(pid, el){
+      el.onclick = function(e){ e.stopPropagation(); toggleExpand(pid); };
+      el.onkeydown = function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleExpand(pid);
+        }
+      };
+    })(p.id, info);
     info.innerHTML =
       (p.num && p.num.indexOf('SEL-') !== 0 ? '<span class="proc-num">N° ' + esc(p.num) + '</span>' : '') +
       '<span class="proc-name" title="' + esc(p.nome) + '">' + esc(p.nome) + '</span>' +
@@ -1702,6 +1716,8 @@ function toggleExpand(pid) {
   });
   var btn = document.querySelector('.process-row[data-pid="' + pid + '"] .expand-btn');
   if (btn) { btn.classList.toggle('open', expanded[pid]); btn.textContent = expanded[pid] ? '−' : '+'; }
+  var info = document.querySelector('.process-row[data-pid="' + pid + '"] .name-info');
+  if (info) info.setAttribute('aria-expanded', expanded[pid] ? 'true' : 'false');
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1801,10 +1817,10 @@ function showProcTT(e, p) {
       alertHtml = '<div class="tt-paral"><b>⛔ Paralisado</b>Processo interrompido por fato extraordinário. Retomada sem prazo definido.</div>';
   }
   var hintHtml = isConcluido
-    ? '<div class="tt-hint">💡 Clique em <b>+</b> para revisar o cronograma executado</div>'
+    ? '<div class="tt-hint">💡 Clique no nome do processo ou em <b>+</b> para revisar o cronograma executado</div>'
     : (p.status === 'atrasado' || p.status === 'aguardando' || p.status === 'paralisado')
-    ? '<div class="tt-hint">🔍 Clique em <b>+</b> para expandir as etapas</div>'
-    : '<div class="tt-hint">💡 Clique em <b>+</b> para ver o cronograma por etapa</div>';
+    ? '<div class="tt-hint">🔍 Clique no nome do processo ou em <b>+</b> para expandir as etapas</div>'
+    : '<div class="tt-hint">💡 Clique no nome do processo ou em <b>+</b> para ver o cronograma por etapa</div>';
   var corPct = pc === 'bad' ? 'danger' : pc === 'plan' ? 'muted' : 'accent2';
   var periodoLabel = p.d0_simulado ? 'Previsão exibida' : 'Período';
   var filaHtml = p.d0_simulado

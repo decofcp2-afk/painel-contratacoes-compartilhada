@@ -528,10 +528,15 @@ function getDados() {
 
       // ── Filtra etapas fora do escopo do SEL ────────────────────────────
       // "Assinatura contrato / Ata (ARP)" é responsabilidade do Setor de
-      // Contratos, não do SEL — por isso é excluída do painel
+      // Contratos, não do SEL — por isso é excluída do painel.
+      // Etapas "Não se aplica" (ex.: IRP quando Tem IRP? = Não) também ficam
+      // fora: não pertencem à atribuição do SEL, igual às contratuais. Assim
+      // não aparecem no Gantt nem entram no % de execução (paridade com o app).
       var etpsFiltradas = etps.filter(function(e) {
         var nomeEtapa = String(e['Etapa'] || '').toLowerCase().trim();
-        return nomeEtapa.indexOf('assinatura') < 0 && nomeEtapa.indexOf('arp') < 0;
+        if (nomeEtapa.indexOf('assinatura') >= 0 || nomeEtapa.indexOf('arp') >= 0) return false;
+        if (normalizeStatus(String(e['StatusEtapa ◄ EDITAR'] || '').trim()) === 'naoaplica') return false;
+        return true;
       });
 
       // ── Calcula datas em cascata (lógica central do sistema) ───────────

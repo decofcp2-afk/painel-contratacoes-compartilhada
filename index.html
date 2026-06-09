@@ -1353,7 +1353,7 @@ function addDiasIso_(iso, dias) {
 function periodoRealizadoEtapa_(et) {
   if (!et || !et.realizacao_iso) return null;
   if (et.status === 'ok' && et.dias > 0 && et.fim_iso) {
-    return { label: 'Período realizado', texto: isoToDD_MM(addDiasIso_(et.fim_iso, 1)) + ' -> ' + isoToDD_MM_YY(et.realizacao_iso) };
+    return { label: 'Período realizado', texto: isoToDD_MM(addDiasIso_(et.fim_iso, 1)) + ' → ' + isoToDD_MM_YY(et.realizacao_iso) };
   }
   return { label: 'Realizado em', texto: isoToDD_MM_YY(et.realizacao_iso) };
 }

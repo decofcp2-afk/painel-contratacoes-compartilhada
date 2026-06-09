@@ -1358,13 +1358,6 @@ function periodoRealizadoEtapa_(et) {
   return { label: 'Realizado em', texto: isoToDD_MM_YY(et.realizacao_iso) };
 }
 
-function idxToISO(idx, fimDoMes) {
-  var y = ANO_BASE + Math.floor(idx / 12);
-  var m = ((idx % 12) + 12) % 12;
-  var d = fimDoMes ? new Date(y, m + 1, 0).getDate() : 1;
-  return y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-}
-
 function isFilaVisual_(p) {
   return p && (p.d0_simulado === true || (p.status === 'planejamento' && Number(p.execucao || 0) === 0));
 }
@@ -1426,7 +1419,7 @@ function getRange(data) {
 // STATUS_COLORS → mapeia o status da etapa para a classe CSS da barra colorida
 // STATUS_LABEL  → mapeia o status para o texto legível exibido no tooltip
 var STATUS_COLORS = { andamento:'b-andamento', atrasado:'b-atrasado', ok:'b-ok', planejamento:'b-planejamento', pendente:'b-pendente', aguardando:'b-aguardando', paralisado:'b-paralisado' };
-var STATUS_LABEL  = { andamento:'Em andamento', atrasado:'Atrasado', ok:'Concluído', planejamento:'A iniciar', pendente:'Pendente', aguardando:'Aguardando requisitante', paralisado:'Paralisado' };
+var STATUS_LABEL  = { andamento:'Em andamento', atrasado:'Atrasado', ok:'Concluído', planejamento:'A iniciar', pendente:'Pendente', aguardando:'Aguardando requisitante', paralisado:'Paralisado', naoaplica:'Não se aplica' };
 
 // ════════════════════════════════════════════════════════════════
 // RENDER — Constrói o Gantt no DOM a partir dos dados filtrados
@@ -2084,34 +2077,10 @@ function setEscala(btn, e) {
   applyFilters();
 }
 
-/*
- * salvarFiltros() / restaurarFiltros()
- * Persistência de filtros entre sessões via sessionStorage.
- * Ano sempre restaura como '' (Todos) — conforme diretriz de UX.
- */
-function salvarFiltros() {
-  try {
-    sessionStorage.setItem('sel_status', activeStatus);
-    sessionStorage.setItem('sel_escala', escalaAtiva || 'mes');
-    // Ano NÃO é salvo — sempre abre como "Todos"
-  } catch(e) {}
-}
-function restaurarFiltros() {
-  try {
-    var st = sessionStorage.getItem('sel_status') || '';
-    if (st) {
-      var btn = document.querySelector('.status-btn[data-s="' + st + '"]');
-      if (btn) setStatusFilter(btn, st);
-    }
-    var esc = sessionStorage.getItem('sel_escala') || 'mes';
-    var ebtn = document.querySelector('.escala-btn[data-e="' + esc + '"]');
-    if (ebtn) setEscala(ebtn, esc);
-    // Ano sempre começa como Todos
-    activeAno = '';
-    var sel = document.getElementById('ano-select');
-    if (sel) sel.value = '';
-  } catch(e) {}
-}
+// NOTA: salvarFiltros() / restaurarFiltros() estão definidos mais abaixo
+// (versão via localStorage, que persiste busca, status, escala e ano).
+// Uma versão antiga via sessionStorage existia aqui e foi removida — por ser
+// declarada antes, era silenciosamente sobrescrita pela definição posterior.
 
 /*
  * populateAnoSelect()

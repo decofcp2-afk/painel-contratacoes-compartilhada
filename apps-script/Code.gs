@@ -540,9 +540,10 @@ function getDados() {
       // são empurradas para frente automaticamente.
       //
       // Exemplo com D0 = 01/Jan/2026:
-      //   Etapa 1: prazo 5 dias, atraso 0 → Jan/2026 a Jan/2026
-      //   Etapa 2: prazo 45 dias, atraso 11 → Jan/2026 a Mar/2026 (11 dias a mais)
-      //   Etapa 3: começa em Mar/2026 (já empurrada pelo atraso anterior)
+      //   Etapa 1: prazo 5 dias, atraso 0  → termina ainda em Jan/2026
+      //   Etapa 2: prazo 45 dias, atraso 11 → termina 56 dias depois (11 a mais)
+      //   Etapa 3: começa onde a Etapa 2 terminou (já empurrada pelo atraso)
+      // (datas exatas dependem de MODO_CONTAGEM_PRAZOS: corridos ou úteis)
       var cursor = d0 ? new Date(d0.getTime()) : new Date();
 
       var etapasCalc = etpsFiltradas.map(function(e) {
@@ -562,10 +563,16 @@ function getDados() {
         // Data de início desta etapa = posição atual do cursor
         var ini = new Date(cursor.getTime());
 
-        // Fim previsto puro (sem atraso): base em dias úteis a partir de ini
-        var fimSemAtraso = adicionarDiasUteis(new Date(ini.getTime()), base);
+        // Etapa "Não se aplica" (ex.: IRP quando Tem IRP? = Não): não consome
+        // prazo. Sem este tratamento, os 15 dias da IRP empurravam a previsão
+        // de processos sem SRP — divergindo do app de gestão, que pula 'na'.
+        var naoAplica = status === 'naoaplica';
 
-        // Calcula atraso em dias úteis comparando DataRealizacao com o fim previsto.
+        // Fim previsto puro (sem atraso): base em dias a partir de ini
+        // (contagem conforme MODO_CONTAGEM_PRAZOS)
+        var fimSemAtraso = adicionarDiasUteis(new Date(ini.getTime()), naoAplica ? 0 : base);
+
+        // Calcula atraso em dias comparando DataRealizacao com o fim previsto.
         //   > 0 → realizou depois do prazo (atraso)
         //   ≤ 0 → realizou no prazo ou adiantado → sem atraso
         // Para etapas não concluídas (sem DataRealizacao), atraso = 0;
@@ -578,10 +585,11 @@ function getDados() {
 
         // Avança o cursor:
         //   - Se DataRealizacao preenchida: cursor avança até ela (data real de saída)
+        //   - Etapa "Não se aplica": cursor NÃO avança (etapa pulada)
         //   - Caso contrário: avança pelo prazo base + atraso (lógica anterior)
         if (dataRealizacao && base > 0) {
           cursor = new Date(dataRealizacao.getTime());
-        } else {
+        } else if (!naoAplica) {
           cursor = adicionarDiasUteis(new Date(cursor.getTime()), base + atraso);
         }
 
@@ -2441,7 +2449,9 @@ function isFeriadoFixo(d) {
   return FERIADOS_FIXOS.indexOf(mm + '-' + dd) >= 0;
 }
 
-// Verifica se uma data é dia útil (não é sáb/dom e não é feriado fixo)
+// Verifica se uma data é dia útil: não é sáb/dom, não é feriado nacional
+// fixo e não está na aba Calendario (feriados móveis/estaduais/municipais).
+// Só é consultada quando MODO_CONTAGEM_PRAZOS === 'uteis'.
 function isDiaUtil(d) {
   var dow = d.getDay(); // 0=Dom, 6=Sáb
   return dow !== 0 && dow !== 6 && !isFeriadoFixo(d) && !calendarioFeriadosMap_()[isoLocal_(d)];

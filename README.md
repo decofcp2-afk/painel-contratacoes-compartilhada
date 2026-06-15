@@ -1,11 +1,11 @@
-# Painel de Contratacoes da Reitoria
+# Painel de Contratações das Licitações Compartilhadas
 
-Painel publico de consulta do cronograma de contratacoes da Reitoria do Colegio Pedro II. Esta versao foi preparada para GitHub Pages e usa um Google Apps Script proprio como backend somente de leitura da planilha.
+Painel publico de consulta do cronograma das licitações compartilhadas do Colégio Pedro II. Esta versao foi preparada para GitHub Pages e usa um Google Apps Script proprio como backend somente de leitura da planilha.
 
 Site publicado:
 
 ```text
-https://decofcp2-afk.github.io/painel-contratacoes-reitoria/
+https://decofcp2-afk.github.io/painel-contratacoes-compartilhada/
 ```
 
 ## O que este painel mostra
@@ -95,7 +95,7 @@ Para funcionar no GitHub Pages, o painel chama o Apps Script por JSONP:
 
 ## Como publicar no GitHub Pages
 
-1. Use um repositorio separado para o painel, por exemplo `painel-contratacoes-reitoria`.
+1. Use um repositorio separado para o painel, por exemplo `painel-contratacoes-compartilhada`.
 2. Mantenha `index.html`, `config.js`, `README.md` e `apps-script/` na raiz do repositorio.
 3. No Apps Script da conta institucional, cole o conteudo de `apps-script/Code.gs`.
 4. Configure no Apps Script o ID real da planilha, preferencialmente em propriedades do script.

@@ -1,3 +1,5 @@
 window.PAINEL_CONFIG = {
-  apiUrl: "https://script.google.com/macros/s/AKfycby1QQr6sq9Tk1W2Xb6aMkaMzW8w4B3d6Aegr9vZ3TtSoNmc-5JjbFkPdoIsc1Ra4zBZ/exec"
+  // URL /exec da implantacao Web App do Apps Script do PAINEL das Licitacoes Compartilhadas.
+  // Cole aqui a URL terminada em /exec do deploy ligado a planilha das licitacoes compartilhadas.
+  apiUrl: "COLE_AQUI_A_URL_EXEC_DO_APPS_SCRIPT_DO_PAINEL_COMPARTILHADA/exec"
 };

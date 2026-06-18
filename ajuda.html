@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a3a5c">
+<meta name="description" content="Ajuda do Painel de Contratações — etapas das licitações compartilhadas e como ler o painel.">
+<title>Ajuda — Painel de Contratações / SEL</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{--navy:#1a3a5c;--navy-2:#244a73;--gold:#c9a227;--blue:#2f6db0;--ink:#1f2d3d;--muted:#5b6b7d;--line:#e3e8ef;--bg:#eef2f6;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+a{color:var(--blue)}
+.top{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:#fff;padding:18px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.top .inst{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#cdd8e6;font-weight:600}
+.top .title{font-size:20px;font-weight:700;margin-top:2px}
+.top .chip{background:rgba(201,162,39,.18);color:#ffe7a8;border:1px solid rgba(201,162,39,.5);padding:4px 12px;border-radius:999px;font-size:13px;font-weight:600}
+.top .spacer{flex:1}
+.top .back{color:#fff;text-decoration:none;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:8px 14px;border-radius:8px;font-size:14px;font-weight:600}
+.top .back:hover{background:rgba(255,255,255,.2)}
+.wrap{max-width:900px;margin:24px auto;padding:0 18px}
+.lead{color:var(--muted);font-size:15px;margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:0 0 18px;box-shadow:0 1px 2px rgba(20,40,70,.04)}
+h2{color:var(--navy);font-size:19px;margin:0 0 12px;border-bottom:2px solid var(--gold);padding-bottom:8px;display:inline-block}
+h3{color:var(--navy-2);font-size:15px;text-transform:uppercase;letter-spacing:.06em;margin:20px 0 10px}
+.etapa{display:flex;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.etapa:first-of-type{border-top:0}
+.num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px}
+.etapa .ebody{flex:1}
+.etapa .name{font-weight:700;color:var(--ink)}
+.etapa p{margin:4px 0 0;color:var(--muted);font-size:14.5px}
+ul{margin:8px 0;padding-left:20px}
+li{margin:4px 0}
+.callout{background:#fbf6e7;border:1px solid #ecdca0;border-left:4px solid var(--gold);border-radius:10px;padding:14px 16px;color:#6b5a1e;font-size:14.5px;margin-top:8px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.dot.pe{background:var(--blue)}.dot.cd{background:var(--gold)}
+.foot{background:var(--navy);color:#cdd8e6;text-align:center;padding:18px;font-size:13px;margin-top:30px}
+.foot a{color:#ffe7a8}
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <div class="inst">Colégio Pedro II</div>
+    <div class="title">Ajuda — Painel de Contratações</div>
+  </div>
+  <span class="chip">Licitações Compartilhadas</span>
+  <span class="spacer"></span>
+  <a class="back" href="index.html">← Voltar ao painel</a>
+</header>
+<div class="wrap">
+  <p class="lead">Esta página explica as etapas de uma licitação, por que elas existem e como interpretar as informações do painel.</p>
+  <section class="card">
+    <h2>O que é este painel</h2>
+    <p>O Painel de Contratações é uma <b>visão pública e somente de leitura</b> do andamento das licitações compartilhadas do Colégio Pedro II. Ele não substitui os sistemas oficiais nem altera dados: apenas lê as informações consolidadas pela equipe e as apresenta de forma rápida e visual.</p>
+    <p>Os números são atualizados automaticamente a partir da planilha de controle do setor — o horário da última atualização aparece no canto direito ("Atualizado: hh:mm"). Todos os prazos são contados em <b>dias corridos</b> (todos os dias contam, inclusive fins de semana e feriados).</p>
+  </section>
+  <section class="card">
+    <h2>As etapas de uma licitação</h2>
+    <p>Cada processo caminha por uma sequência de etapas, organizadas em duas grandes fases. A <b>Fase Interna</b> é todo o planejamento feito dentro da instituição; a <b>Fase Externa</b> é quando a contratação vai a mercado e os fornecedores disputam.</p>
+    <h3>Fase Interna — planejamento</h3>
+    <div class="etapa"><div class="num">1</div><div class="ebody"><div class="name">Designação da equipe</div><p>Define quem vai conduzir o processo e responder por cada parte dele. É o ponto de partida: sem responsáveis definidos, não há quem toque as etapas seguintes nem a quem cobrar prazos.</p></div></div>
+    <div class="etapa"><div class="num">2</div><div class="ebody"><div class="name">ETP + Mapa de Riscos + Pesquisa de Preços</div><p>Três documentos que sustentam a decisão de contratar: o <b>ETP</b> justifica a necessidade e a melhor solução; o <b>Mapa de Riscos</b> antecipa o que pode dar errado; a <b>Pesquisa de Preços</b> estima o custo. É a etapa que dá base legal e econômica ao processo.</p></div></div>
+    <div class="etapa"><div class="num">3</div><div class="ebody"><div class="name">Minuta do Termo de Referência (TR)</div><p>O TR é o documento central: descreve o objeto, especificações, quantidades, obrigações e critérios de aceitação. Um TR bem feito evita dúvidas, impugnações e contratações que não atendem à necessidade real.</p></div></div>
+    <div class="etapa"><div class="num">4</div><div class="ebody"><div class="name">IRP — Intenção de Registro de Preços</div><p>Divulga a intenção de registro de preços para que outros órgãos manifestem interesse e adiram à mesma licitação. Permite compras conjuntas, ganho de escala e melhores preços — daí o caráter "compartilhado" dessas licitações.</p></div></div>
+    <div class="etapa"><div class="num">5</div><div class="ebody"><div class="name">Adequações finais e envio à Procuradoria</div><p>Os documentos são revisados e seguem para a análise jurídica. A Procuradoria verifica a legalidade e aponta correções — filtro essencial para reduzir o risco de nulidade ou questionamento.</p></div></div>
+    <div class="etapa"><div class="num">6</div><div class="ebody"><div class="name">Versão final do TR e documentos aprovados</div><p>Após o parecer jurídico, os documentos são consolidados na versão definitiva. Concluída esta etapa, o processo está pronto para ir a mercado.</p></div></div>
+    <h3>Fase Externa — seleção do fornecedor</h3>
+    <div class="etapa"><div class="num">7</div><div class="ebody"><div class="name">Fase externa — Pregão Eletrônico</div><p>O edital é publicado e abre-se a disputa entre os fornecedores. Ocorrem, em sequência, a sessão de lances, a habilitação, a adjudicação e a homologação. É a fase em que a concorrência define o preço final e o fornecedor contratado.</p></div></div>
+    <div class="callout"><b>Por que as etapas importam.</b> A ordem das etapas não é burocracia: cada uma reduz um risco específico (comprar errado, pagar caro, ser questionado juridicamente, atrasar a entrega). Pular ou atropelar etapas costuma custar mais tempo lá na frente — por isso o painel acompanha etapa por etapa, e não só o resultado final.</div>
+  </section>
+  <section class="card">
+    <h2>Como ler o painel</h2>
+    <h3>Indicadores do topo (KPIs)</h3>
+    <ul>
+      <li><b>Total de Processos</b> — quantos processos estão ativos no exercício.</li>
+      <li><b>Em Andamento</b> — processos em execução, na fase interna ou externa.</li>
+      <li><b>Atrasados</b> — processos com pelo menos uma etapa fora do prazo.</li>
+      <li><b>Fila de Prioridade</b> — processos em análise, aguardando priorização.</li>
+      <li><b>Concluídos</b> — processos com 100% das etapas finalizadas.</li>
+      <li><b>Capacidade do Setor</b> — o quanto a equipe está carregada. Acima de 100% indica capacidade máxima: não encaminhar novos processos e aguardar orientação do setor.</li>
+    </ul>
+    <h3>Legenda e cores</h3>
+    <p>Cada processo é colorido conforme a modalidade:<br>
+    <span class="dot pe"></span><b>Pregão Eletrônico (PE)</b> — azul &nbsp;·&nbsp; <span class="dot cd"></span><b>Contratação Direta (CD)</b> — dourado.</p>
+    <h3>Filtros</h3>
+    <ul>
+      <li><b>Pesquisar</b> — busca por número ou objeto do processo.</li>
+      <li><b>Status</b> — Todos, Andamento, Atrasado ou A Iniciar.</li>
+      <li><b>Escala</b> — zoom da linha do tempo: Mês, Trimestre ou Ano.</li>
+      <li><b>Ano</b> — limita a visão a um exercício específico.</li>
+    </ul>
+    <h3>Gráfico de Gantt (linha do tempo)</h3>
+    <p>Cada processo aparece como uma barra ao longo do tempo, com os anos e meses no topo. A <b>linha vertical</b> marca o dia de hoje. Ao lado do nome, uma <b>barra de percentual</b> mostra o quanto já foi concluído, e um <b>ícone de alerta (!)</b> sinaliza atrasos.</p>
+    <p>Ao clicar no <b>"+"</b> de um processo, ele se expande e mostra as etapas. Passando o mouse sobre uma barra, aparece um resumo com o <b>responsável</b>, a <b>fase</b>, o <b>status</b>, o <b>prazo planejado</b> e a <b>data real</b> — e, quando houver atraso, o <b>motivo</b> registrado.</p>
+  </section>
+</div>
+<footer class="foot">
+  Colégio Pedro II · Setor de Licitações — Painel de Contratações &nbsp;·&nbsp; <a href="mailto:decof@cp2.g12.br">decof@cp2.g12.br</a>
+</footer>
+</body>
+</html>
